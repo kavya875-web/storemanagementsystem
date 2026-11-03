@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>General Store Billing &amp; Khata Manager</title>
+  <meta name="description" content="Kirana and General Store billing counter, inventory stock manager, customer udhari khata ledger, and digital WhatsApp invoices." />
+  <meta property="og:title" content="General Store Billing &amp; Khata Manager" />
+  <meta property="og:description" content="Kirana and General Store billing counter, inventory stock manager, customer udhari khata ledger, and digital WhatsApp invoices." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <meta name="theme-color" content="#2563eb">
+  <link rel="stylesheet" crossorigin href="index-DUd8jQlX.css">
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+
+  <!-- Print Only Header -->
+  <div class="print-header">
+    <h1 id="print-store-name">General Store - Inventory Stock Report</h1>
+    <p id="print-date"></p>
+  </div>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon">
+          <!-- Store Icon SVG -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/>
+            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+            <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/>
+            <path d="M2 7h20"/>
+            <path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title" id="display-store-name">My General Store</h1>
+          <p class="brand-subtitle">Stock & Price Inventory Manager</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- New Bill Button -->
+        <button class="btn btn-primary" id="btn-quick-billing" style="background: #0f172a;" title="Open Billing Counter">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          🧾 Billing Counter
+        </button>
+
+        <!-- Add Incoming Stock Button (Primary Highlight) -->
+        <button class="btn btn-success" id="btn-open-stockin" title="Add new incoming delivery stock">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          + Add New Stock (Incoming)
+        </button>
+
+        <!-- Add New Product Button -->
+        <button class="btn btn-primary" id="btn-open-add-product">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+          </svg>
+          + New Product
+        </button>
+
+        <!-- Quick Sale Button -->
+        <button class="btn btn-outline" id="btn-open-sale">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
+            <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+          </svg>
+          Quick Sale
+        </button>
+
+        <!-- Backup & Settings Button -->
+        <button class="btn btn-outline" id="btn-open-settings" title="Export / Import & Store Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+          </svg>
+          Backup & Tools
+        </button>
+
+        <!-- Print Button -->
+        <button class="btn btn-outline" onclick="window.print()" title="Print current stock sheet">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          Print
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Top Stats Overview Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>Total Products</h4>
+          <div class="stat-value" id="stat-total-products">0</div>
+        </div>
+        <div class="stat-icon blue">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>Total Items in Stock</h4>
+          <div class="stat-value" id="stat-total-quantity">0</div>
+        </div>
+        <div class="stat-icon green">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/>
+            <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>Total Stock Value</h4>
+          <div class="stat-value" id="stat-stock-value">₹0</div>
+        </div>
+        <div class="stat-icon purple">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>Low Stock Items</h4>
+          <div class="stat-value" id="stat-low-stock" style="color: #d97706;">0</div>
+        </div>
+        <div class="stat-icon amber">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" data-tab="tab-billing">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        🧾 Billing Counter (POS)
+      </button>
+
+      <button class="tab-btn" data-tab="tab-customers">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        👥 Registered Customers
+      </button>
+
+      <button class="tab-btn" data-tab="tab-inventory">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+          <line x1="3" y1="9" x2="21" y2="9"/>
+          <line x1="9" y1="21" x2="9" y2="9"/>
+        </svg>
+        All Store Stock (Inventory)
+      </button>
+
+      <button class="tab-btn" data-tab="tab-history">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        Stock In Log (Incoming)
+      </button>
+
+      <button class="tab-btn" data-tab="tab-invoices">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <path d="M7 15h0M2 9.5h20"/>
+        </svg>
+        Invoices & Bills
+      </button>
+
+      <button class="tab-btn" data-tab="tab-sales">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+          <polyline points="17 6 23 6 23 12"/>
+        </svg>
+        Sales Log
+      </button>
+
+      <button class="tab-btn" data-tab="tab-supplier-bills">
+        🏭 Supplier Pending Bills <span class="badge badge-danger" id="tab-badge-bills" style="display:none;"></span>
+      </button>
+
+      <button class="tab-btn" data-tab="tab-udhari">
+        📒 Customer Udhari <span class="badge badge-warning" id="tab-badge-udhari" style="display:none;"></span>
+      </button>
+    </div>
+
+    <!-- TAB 0: BILLING COUNTER (POS) -->
+    <section id="tab-billing" class="tab-content">
+      <div class="billing-layout">
+        <!-- Left: Product Catalog & Quick-Add -->
+        <div class="billing-catalog">
+          <div class="pos-search-bar">
+            <div class="search-input-wrapper" style="flex: 1;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" id="pos-search-input" class="search-input" placeholder="Type item name or scan barcode (Press Enter to add)...">
+            </div>
+            <button class="btn btn-outline btn-sm" id="pos-clear-search" title="Clear Search">&times;</button>
+          </div>
+
+          <!-- Category Pills -->
+          <div class="pos-category-scroll" id="pos-category-pills">
+            <!-- Populated dynamically -->
+          </div>
+
+          <!-- Products Grid -->
+          <div class="pos-product-grid" id="pos-product-grid">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Right: Current Customer Bill / Cart -->
+        <div class="billing-cart-panel">
+          <div class="cart-header">
+            <div>
+              <h3 style="font-size: 1.05rem; font-weight: 700; color: #0f172a; margin-bottom: 2px;">Customer Bill</h3>
+              <p style="font-size: 0.75rem; color: var(--text-muted);" id="pos-bill-date"></p>
+            </div>
+            <span class="cart-invoice-badge" id="pos-invoice-num">#INV-1001</span>
+          </div>
+
+          <!-- Customer details with registered mobile auto-lookup -->
+          <div class="customer-info-box">
+            <div class="customer-input-row">
+              <div>
+                <input type="tel" id="pos-customer-phone" class="form-control" style="padding: 6px 10px; font-size: 0.85rem;" placeholder="Customer Mobile # (e.g. 9876543210)" list="customer-phone-datalist">
+              </div>
+              <div>
+                <input type="text" id="pos-customer-name" class="form-control" style="padding: 6px 10px; font-size: 0.85rem;" placeholder="Customer Name">
+              </div>
+            </div>
+            <div id="pos-customer-status" class="customer-status-badge">
+              <span>💡 Enter 10-digit mobile to send bill on WhatsApp & register customer</span>
+            </div>
+            <div id="pos-customer-previous-due" style="display:none; margin-top:6px; padding:6px 10px; background:#fef3c7; border:1px solid #fde68a; border-radius:6px; font-size:0.8rem; color:#92400e;"></div>
+          </div>
+
+          <!-- Cart items table -->
+          <div class="cart-table-wrapper">
+            <table class="cart-table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th style="width: 100px; text-align: center;">Qty</th>
+                  <th style="text-align: right;">Rate</th>
+                  <th style="text-align: right;">Total</th>
+                  <th style="width: 32px;"></th>
+                </tr>
+              </thead>
+              <tbody id="pos-cart-tbody">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+            <div id="pos-cart-empty" class="empty-state" style="padding: 30px 10px;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: #cbd5e1; margin-bottom: 6px;">
+                <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
+                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+              </svg>
+              <h4 style="font-size: 0.95rem; color: #64748b;">Bill is empty</h4>
+              <p style="font-size: 0.8rem; color: #94a3b8;">Click products on the left or search above to add items</p>
+            </div>
+          </div>
+
+          <!-- Bill Summary -->
+          <div class="cart-summary-box">
+            <div class="summary-row">
+              <span>Subtotal:</span>
+              <strong id="pos-subtotal">₹0.00</strong>
+            </div>
+
+            <div class="summary-row">
+              <span>Discount (₹):</span>
+              <input type="number" id="pos-discount" class="form-control" style="width: 90px; padding: 4px 8px; text-align: right; font-size: 0.85rem;" min="0" step="any" value="0">
+            </div>
+
+            <!-- Payment Mode -->
+            <div style="margin: 8px 0 6px;">
+              <label style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">Payment Mode</label>
+              <div class="payment-methods-grid">
+                <button type="button" class="pay-btn active" data-mode="Cash">💵 Cash</button>
+                <button type="button" class="pay-btn" data-mode="UPI">📱 GPay QR</button>
+                <button type="button" class="pay-btn" data-mode="Udhari">📒 Udhari</button>
+                <button type="button" class="pay-btn" data-mode="Partial">⚖️ Aadha+Udhari</button>
+              </div>
+
+              <!-- UPI / GPay QR Panel -->
+              <div id="pos-upi-qr-panel" style="display:none; margin-top:12px; padding:14px; border:1px solid #cbd5e1; border-radius:12px; text-align:center; background:#fff;">
+                <h4 style="margin:0 0 8px; color:#0f172a;">Scan & Pay using any UPI app</h4>
+                <img src="gpay-qr.jpeg" onerror="this.style.display='none'" alt="Google Pay UPI QR code" style="width: min(100%, 280px); height:auto; display:block; margin:0 auto 8px; border-radius:8px;">
+                <p style="margin:4px 0; font-size:0.9rem;"><strong>UPI ID:</strong> trishagarwal0210@okhdfcbank</p>
+                <p style="margin:6px 0; font-size:0.82rem; color:#475569;">Bill amount: <strong id="pos-upi-amount">₹0.00</strong></p>
+                <p style="margin:6px 0 10px; font-size:0.8rem; color:#b45309;">After scanning, check your GPay/bank app and confirm that the payment has arrived.</p>
+                <label style="display:flex; align-items:center; justify-content:center; gap:8px; font-size:0.9rem; font-weight:600;">
+                  <input type="checkbox" id="pos-upi-payment-confirmed">
+                  I have received and verified the payment
+                </label>
+              </div>
+
+              <!-- Udhari (Khata) Auto-Sync Panel -->
+              <div id="pos-udhari-panel" style="display:none; margin-top:10px; padding:12px; background:#fffbeb; border:1.5px solid #fde68a; border-radius:10px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <span style="font-size:1.1rem;">📒</span>
+                    <strong style="font-size:0.86rem; color:#92400e;">Customer Udhari (Khata)</strong>
+                  </div>
+                  <span class="badge badge-warning" style="font-size:0.7rem; background:#fef3c7; color:#b45309; border:1px solid #fde68a;">Auto-Sync to Khata</span>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+                  <div>
+                    <label style="font-size:0.72rem; font-weight:600; color:#78350f; display:block; margin-bottom:2px;">Abhi Mila (Advance ₹)</label>
+                    <input type="number" id="pos-udhari-advance" class="form-control" style="padding:5px 8px; font-size:0.88rem;" min="0" step="any" value="0" placeholder="0">
+                    <span style="font-size:0.68rem; color:#92400e; display:block; margin-top:2px;">0 = Poori udhari</span>
+                  </div>
+                  <div>
+                    <label style="font-size:0.72rem; font-weight:600; color:#b91c1c; display:block; margin-bottom:2px;">Khate me Baaki (Due)</label>
+                    <div id="pos-udhari-remaining" style="font-size:1.15rem; font-weight:800; color:#b91c1c; padding:3px 0;">₹0.00</div>
+                    <span style="font-size:0.68rem; color:#b91c1c; display:block; margin-top:2px;">Khata section me judega</span>
+                  </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+                  <div>
+                    <label style="font-size:0.72rem; font-weight:600; color:#78350f; display:block; margin-bottom:2px;">Advance Mode</label>
+                    <select id="pos-udhari-advance-mode" class="form-control" style="padding:5px 8px; font-size:0.82rem;">
+                      <option value="Cash">💵 Cash</option>
+                      <option value="UPI">📱 UPI / GPay</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style="font-size:0.72rem; font-weight:600; color:#78350f; display:block; margin-bottom:2px;">Kab Tak Denge (Due Date)</label>
+                    <input type="date" id="pos-udhari-due-date" class="form-control" style="padding:5px 8px; font-size:0.82rem;">
+                  </div>
+                </div>
+
+                <div>
+                  <label style="font-size:0.72rem; font-weight:600; color:#78350f; display:block; margin-bottom:2px;">Note / Saaman Yaadgar</label>
+                  <input type="text" id="pos-udhari-note" class="form-control" style="padding:5px 8px; font-size:0.82rem;" placeholder="e.g. Mahine ka ration, shaam ko aake denge">
+                </div>
+
+                <div id="pos-udhari-cust-alert" style="margin-top:8px; padding:6px 8px; background:#fee2e2; border:1px solid #fca5a5; border-radius:6px; font-size:0.75rem; color:#b91c1c; display:none;">
+                  ⚠️ <b>Zaroori:</b> Udhari jodne ke liye upar <b>Customer ka 10-digit Mobile number</b> bharna zaroori hai.
+                </div>
+              </div>
+            </div>
+
+            <!-- Cash Return Calculator -->
+            <div class="cash-return-box" id="pos-cash-calculator">
+              <div>
+                <label style="font-size: 0.72rem; font-weight: 600; color: #166534; display: block; margin-bottom: 2px;">Cash Received</label>
+                <input type="number" id="pos-cash-received" class="form-control" style="padding: 4px 8px; font-size: 0.9rem;" placeholder="e.g. 500">
+              </div>
+              <div style="text-align: right;">
+                <label style="font-size: 0.72rem; font-weight: 600; color: #166534; display: block; margin-bottom: 2px;">Change to Return</label>
+                <div id="pos-cash-change" style="font-size: 1.15rem; font-weight: 800; color: #15803d;">₹0.00</div>
+              </div>
+              <div id="pos-cash-shortage-tip" style="display:none; grid-column: span 2; margin-top: 4px; padding: 4px 8px; background:#fffbeb; border:1px dashed #f59e0b; border-radius:4px; font-size:0.75rem; color:#b45309;"></div>
+            </div>
+
+            <!-- Grand Total -->
+            <div class="summary-row total-row">
+              <span>GRAND TOTAL:</span>
+              <span class="total-amount" id="pos-grand-total">₹0.00</span>
+            </div>
+          </div>
+
+          <!-- Checkout Buttons -->
+          <div class="cart-actions">
+            <!-- Send to WhatsApp Button (Highlighted!) -->
+            <button class="btn btn-whatsapp" id="btn-complete-and-whatsapp" style="justify-content: center; padding: 11px; font-size: 0.92rem; font-weight: 700;">
+              <svg viewBox="0 0 24 24" fill="currentColor" style="width: 18px; height: 18px;">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              📲 Complete & Send Bill on WhatsApp
+            </button>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <button class="btn btn-success" id="btn-complete-and-print" style="justify-content: center;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                  <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                Complete & Print Slip
+              </button>
+              <button class="btn btn-primary" id="btn-complete-sale-noprint" style="justify-content: center;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Complete (No Print)
+              </button>
+            </div>
+
+            <button class="btn btn-outline btn-sm" id="btn-clear-cart" style="justify-content: center; color: var(--danger); margin-top: 2px;">
+              Clear Current Bill
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: REGISTERED CUSTOMERS -->
+    <section id="tab-customers" class="tab-content" style="display: none;">
+      <div class="control-bar">
+        <div>
+          <h3 style="font-size: 1rem; font-weight: 600; color: #334155;">Registered Customers Directory</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Manage registered customers, mobile numbers, and purchase history</p>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <input type="text" id="customer-search" class="search-input" style="width: 220px;" placeholder="Search name or mobile...">
+          <button class="btn btn-primary btn-sm" id="btn-open-add-customer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <line x1="20" y1="8" x2="20" y2="14"/>
+              <line x1="23" y1="11" x2="17" y2="11"/>
+            </svg>
+            + Register New Customer
+          </button>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Customer Name</th>
+                <th>Registered Mobile</th>
+                <th>Total Purchases</th>
+                <th>Total Spent</th>
+                <th>Last Visit</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="customers-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+        <div id="no-customers-msg" class="empty-state" style="display: none;">
+          <h3>No registered customers found</h3>
+          <p>Customers entered in billing or added via "+ Register New Customer" will appear here.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 1: INVENTORY TABLE -->
+    <section id="tab-inventory" class="tab-content" style="display: none;">
+      <!-- Search & Filters -->
+      <div class="control-bar">
+        <div class="search-filter-group">
+          <div class="search-input-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" id="inventory-search" class="search-input" placeholder="Search product name, category, or barcode...">
+          </div>
+
+          <select id="category-filter" class="select-filter">
+            <option value="">All Categories</option>
+          </select>
+        </div>
+
+        <div class="quick-filter-pills">
+          <button class="pill-btn active" data-filter="all">All Items</button>
+          <button class="pill-btn" data-filter="low">⚠️ Low Stock</button>
+          <button class="pill-btn" data-filter="out">❌ Out of Stock</button>
+        </div>
+      </div>
+
+      <!-- Main Stock Table -->
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Category</th>
+                <th>Unit</th>
+                <th>Cost Price (Buying)</th>
+                <th>Selling Price (MRP)</th>
+                <th>Remaining Stock</th>
+                <th>Status</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inventory-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+        <div id="no-products-msg" class="empty-state" style="display: none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M16 16s-1.5-2-4-2-4 2-4 2"/>
+            <line x1="9" y1="9" x2="9.01" y2="9"/>
+            <line x1="15" y1="9" x2="15.01" y2="9"/>
+          </svg>
+          <h3>No products found</h3>
+          <p>Try clearing search filters or click "+ New Product" to add your store items.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: STOCK IN HISTORY -->
+    <section id="tab-history" class="tab-content" style="display: none;">
+      <div class="control-bar">
+        <h3 style="font-size: 1rem; font-weight: 600; color: #334155;">Incoming Delivery & Restock History</h3>
+        <button class="btn btn-outline btn-sm" id="btn-export-restock-csv">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+          </svg>
+          Export Restock Log (CSV)
+        </button>
+      </div>
+
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date & Time</th>
+                <th>Product</th>
+                <th>Previous Stock</th>
+                <th>+ Added Stock</th>
+                <th>= New Total Stock</th>
+                <th>Batch Cost Price</th>
+                <th>Supplier / Notes</th>
+              </tr>
+            </thead>
+            <tbody id="restock-history-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+        <div id="no-history-msg" class="empty-state" style="display: none;">
+          <h3>No stock additions logged yet</h3>
+          <p>When you receive deliveries and click "+ Add New Stock", records will be listed here.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: INVOICES & BILLS HISTORY -->
+    <section id="tab-invoices" class="tab-content" style="display: none;">
+      <div class="control-bar">
+        <div>
+          <h3 style="font-size: 1rem; font-weight: 600; color: #334155;">Customer Invoices & Bills History</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">View, reprint, or send digital bills to customer WhatsApp</p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="invoice-search" class="search-input" style="width: 240px;" placeholder="Search invoice #, customer, or phone...">
+          <button class="btn btn-outline btn-sm" id="btn-export-invoices-csv">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+            </svg>
+            Export Invoices (CSV)
+          </button>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Invoice #</th>
+                <th>Date & Time</th>
+                <th>Customer Name</th>
+                <th>Mobile Number</th>
+                <th>Total Items</th>
+                <th>Payment Mode</th>
+                <th>Grand Total</th>
+                <th style="text-align: right;">Send / Print</th>
+              </tr>
+            </thead>
+            <tbody id="invoices-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+        <div id="no-invoices-msg" class="empty-state" style="display: none;">
+          <h3>No customer invoices yet</h3>
+          <p>Bills generated in the Billing Counter will be saved here.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: SALES HISTORY -->
+    <section id="tab-sales" class="tab-content" style="display: none;">
+      <div class="control-bar">
+        <h3 style="font-size: 1rem; font-weight: 600; color: #334155;">Recorded Sales History</h3>
+        <button class="btn btn-outline btn-sm" id="btn-export-sales-csv">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+          </svg>
+          Export Sales Log (CSV)
+        </button>
+      </div>
+
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date & Time</th>
+                <th>Product</th>
+                <th>Qty Sold</th>
+                <th>Selling Price</th>
+                <th>Total Sale Amount</th>
+                <th>Remaining Stock After Sale</th>
+              </tr>
+            </thead>
+            <tbody id="sales-history-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+        <div id="no-sales-msg" class="empty-state" style="display: none;">
+          <h3>No sales recorded yet</h3>
+          <p>Use "Quick Sale" or complete customer bills to record sales.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: SUPPLIER PENDING BILLS (jo humein dena hai) -->
+    <section id="tab-supplier-bills" class="tab-content" style="display: none;">
+      <div class="khata-summary">
+        <div class="khata-card"><small>Total Pending (Humein Dena Hai)</small><b id="sb-total" style="color:#b91c1c;">₹0.00</b></div>
+        <div class="khata-card"><small>Pending Bills</small><b id="sb-count">0</b></div>
+        <div class="khata-card"><small>Date Nikal Gayi (Overdue)</small><b id="sb-overdue" style="color:#b45309;">₹0.00</b></div>
+      </div>
+      <div class="control-bar">
+        <div>
+          <h3 style="font-size: 1rem; font-weight: 600; color: #334155;">Supplier / Distributor Pending Bills</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Jo bill hume shop walon ko pay karne hain</p>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <input type="text" id="sb-search" class="search-input" style="width: 220px;" placeholder="Supplier ya bill # dhundo...">
+          <select id="sb-filter" class="select-filter">
+            <option value="pending">Pending</option>
+            <option value="paid">Paid / Clear</option>
+            <option value="all">Sab</option>
+          </select>
+          <button class="btn btn-primary btn-sm" id="btn-open-add-sbill">+ Pending Bill Jodo</button>
+        </div>
+      </div>
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Supplier / Shop</th>
+                <th>Bill # / Note</th>
+                <th>Bill Date</th>
+                <th>Last Date</th>
+                <th>Bill Amount</th>
+                <th>Paid</th>
+                <th>Baaki</th>
+                <th>Status</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="sb-table-body"></tbody>
+          </table>
+        </div>
+        <div id="sb-empty" class="empty-state" style="display: none;">
+          <h3>Koi pending bill nahi hai</h3>
+          <p>"+ Pending Bill Jodo" dabakar supplier ka bill likhein.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: CUSTOMER UDHARI (jo customers se lena hai) -->
+    <section id="tab-udhari" class="tab-content" style="display: none;">
+      <div class="khata-summary">
+        <div class="khata-card"><small>Total Udhari (Customers se Lena Hai)</small><b id="ud-total" style="color:#b45309;">₹0.00</b></div>
+        <div class="khata-card"><small>Customers jinka baaki hai</small><b id="ud-count">0</b></div>
+        <div class="khata-card"><small>Ab tak wapas mila</small><b id="ud-received" style="color:#15803d;">₹0.00</b></div>
+      </div>
+      <div class="control-bar">
+        <div>
+          <h3 style="font-size: 1rem; font-weight: 600; color: #334155;">Customer Udhari / Khata</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Customer ka naam, kitna udhar aur kab wapas aaya</p>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+          <div class="quick-filter-pills" id="ud-view-pills">
+            <button type="button" class="pill-btn active" id="btn-ud-view-grouped">👥 Customer Sections</button>
+            <button type="button" class="pill-btn" id="btn-ud-view-all">📋 Sabhi Bills</button>
+          </div>
+          <input type="text" id="ud-search" class="search-input" style="width: 200px;" placeholder="Naam ya mobile dhundo...">
+          <select id="ud-filter" class="select-filter">
+            <option value="pending">Baaki hai</option>
+            <option value="paid">Clear</option>
+            <option value="all">Sab</option>
+          </select>
+          <button class="btn btn-primary btn-sm" id="btn-open-add-udhari">+ Nayi Udhari Jodo</button>
+        </div>
+      </div>
+
+      <!-- 1. DEDICATED CUSTOMER KHATA SECTIONS (Default: one single section per customer containing all their bills) -->
+      <div id="ud-customer-sections" class="customer-sections-list">
+        <!-- Dynamically rendered customer cards -->
+      </div>
+
+      <!-- 2. FLAT ALL BILLS TABLE (displayed when '📋 Sabhi Bills' view is clicked) -->
+      <div class="table-card" id="ud-table-card" style="display: none;">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead id="ud-table-thead">
+              <tr>
+                <th>Customer</th>
+                <th>Mobile</th>
+                <th>Bill #</th>
+                <th>Date</th>
+                <th>Saaman / Note</th>
+                <th>Udhari Amount</th>
+                <th>Wapas Mila</th>
+                <th>Baaki (Due)</th>
+                <th>Status</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ud-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="ud-empty" class="empty-state" style="display: none;">
+        <h3>Koi udhari nahi hai</h3>
+        <p>Billing counter se "Udhari" bill banayein ya "+ Nayi Udhari Jodo" dabayein.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- MODAL 1: ADD INCOMING STOCK (STOCK IN) -->
+  <div class="modal-overlay" id="modal-stockin">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-title-icon" style="background: #dcfce7; color: #166534;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Add New Incoming Stock</h3>
+            <p class="form-hint">Calculate: Previous Remaining + New Arrival = Total Stock</p>
+          </div>
+        </div>
+        <button class="close-btn" data-close="modal-stockin">&times;</button>
+      </div>
+
+      <form id="form-stockin">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="stockin-product-select">Select Product <span class="req">*</span></label>
+            <select id="stockin-product-select" class="form-control" required>
+              <option value="">-- Choose Product to Restock --</option>
+            </select>
+          </div>
+
+          <!-- THE REAL-TIME EQUATION BOX -->
+          <div class="stock-calculation-card" id="stockin-calc-box">
+            <div class="calc-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="4" y="2" width="16" height="20" rx="2"/>
+                <line x1="8" y1="6" x2="16" y2="6"/>
+                <line x1="16" y1="14" x2="16" y2="14"/>
+                <path d="M8 14h.01M12 14h.01M8 18h.01M12 18h.01M16 18h.01"/>
+              </svg>
+              Live Stock Calculation
+            </div>
+            <div class="calc-equation-grid">
+              <div class="calc-box">
+                <div class="label">Remaining Stock</div>
+                <div class="num" id="calc-remaining-qty">0</div>
+                <div class="label" id="calc-unit-label">units</div>
+              </div>
+              <div class="calc-operator">+</div>
+              <div class="calc-box">
+                <div class="label">New Incoming</div>
+                <div class="num" id="calc-incoming-qty" style="color: #2563eb;">0</div>
+                <div class="label" id="calc-unit-label2">units</div>
+              </div>
+              <div class="calc-operator">=</div>
+              <div class="calc-box highlight">
+                <div class="label">NEW TOTAL STOCK</div>
+                <div class="num" id="calc-new-total">0</div>
+                <div class="label" id="calc-unit-label3">units</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="stockin-qty">New Incoming Quantity (Arrived in shop) <span class="req">*</span></label>
+            <input type="number" id="stockin-qty" class="form-control" min="1" step="any" placeholder="Enter arrived quantity (e.g. 20, 50)" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="stockin-cost-price">Update Cost Price (Optional)</label>
+              <input type="number" id="stockin-cost-price" class="form-control" min="0" step="0.01" placeholder="New buying price per unit">
+              <div class="form-hint">Leave blank to keep existing cost</div>
+            </div>
+
+            <div class="form-group">
+              <label for="stockin-selling-price">Update Selling Price / MRP (Optional)</label>
+              <input type="number" id="stockin-selling-price" class="form-control" min="0" step="0.01" placeholder="New customer price">
+              <div class="form-hint">Leave blank to keep existing price</div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="stockin-supplier">Supplier / Distributor Name</label>
+              <input type="text" id="stockin-supplier" class="form-control" placeholder="e.g. Metro Cash & Carry, Invoice #123">
+            </div>
+
+            <div class="form-group">
+              <label for="stockin-date">Delivery Date</label>
+              <input type="datetime-local" id="stockin-date" class="form-control">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-close="modal-stockin">Cancel</button>
+          <button type="submit" class="btn btn-success">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Confirm & Update Total Stock
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: UPDATE PRODUCT & PRICE (EDIT PAGE) -->
+  <div class="modal-overlay" id="modal-update-product">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-title-icon" style="background: #e0e7ff; color: #4338ca;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+          </div>
+          <div>
+            <h3>Update Product & Price Details</h3>
+            <p class="form-hint">Modify price, stock balance, or product information</p>
+          </div>
+        </div>
+        <button class="close-btn" data-close="modal-update-product">&times;</button>
+      </div>
+
+      <form id="form-update-product">
+        <input type="hidden" id="update-product-id">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="update-name">Product Name <span class="req">*</span></label>
+            <input type="text" id="update-name" class="form-control" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="update-category">Category</label>
+              <input type="text" id="update-category" class="form-control" list="category-datalist" placeholder="e.g. Grains, Oils, Soap, Snacks">
+            </div>
+
+            <div class="form-group">
+              <label for="update-unit">Unit of Measure <span class="req">*</span></label>
+              <select id="update-unit" class="form-control" required>
+                <option value="Packets">Packets (Pkt)</option>
+                <option value="Pieces">Pieces (Pcs)</option>
+                <option value="kg">Kilograms (kg)</option>
+                <option value="grams">Grams (g)</option>
+                <option value="Liters">Liters (L)</option>
+                <option value="ml">Milliliters (ml)</option>
+                <option value="Boxes">Boxes</option>
+                <option value="Dozens">Dozens</option>
+                <option value="Bottles">Bottles</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="update-cost-price">Cost Price (Purchase / Buying Price) <span class="req">*</span></label>
+              <input type="number" id="update-cost-price" class="form-control" min="0" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+              <label for="update-selling-price">Selling Price (MRP / Retail Price) <span class="req">*</span></label>
+              <input type="number" id="update-selling-price" class="form-control" min="0" step="0.01" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="update-stock-qty">Current Remaining Stock</label>
+              <input type="number" id="update-stock-qty" class="form-control" min="0" step="any" required>
+            </div>
+
+            <div class="form-group">
+              <label for="update-min-stock">Low Stock Alert Threshold</label>
+              <input type="number" id="update-min-stock" class="form-control" min="0" step="1" value="5">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="update-barcode">Barcode / Item Code (Optional)</label>
+            <input type="text" id="update-barcode" class="form-control" placeholder="Scan or enter SKU">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-close="modal-update-product">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: ADD NEW PRODUCT -->
+  <div class="modal-overlay" id="modal-add-product">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-title-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Add New Product to Shop</h3>
+            <p class="form-hint">Register a new product in your inventory</p>
+          </div>
+        </div>
+        <button class="close-btn" data-close="modal-add-product">&times;</button>
+      </div>
+
+      <form id="form-add-product">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="new-name">Product Name <span class="req">*</span></label>
+            <input type="text" id="new-name" class="form-control" placeholder="e.g. Aashirvaad Shudh Chakki Atta 5kg" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="new-category">Category</label>
+              <input type="text" id="new-category" class="form-control" list="category-datalist" placeholder="e.g. Flour & Grains">
+            </div>
+
+            <div class="form-group">
+              <label for="new-unit">Unit <span class="req">*</span></label>
+              <select id="new-unit" class="form-control" required>
+                <option value="Packets">Packets (Pkt)</option>
+                <option value="Pieces">Pieces (Pcs)</option>
+                <option value="kg">Kilograms (kg)</option>
+                <option value="grams">Grams (g)</option>
+                <option value="Liters">Liters (L)</option>
+                <option value="ml">Milliliters (ml)</option>
+                <option value="Boxes">Boxes</option>
+                <option value="Dozens">Dozens</option>
+                <option value="Bottles">Bottles</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="new-cost-price">Cost Price (Buying Price) <span class="req">*</span></label>
+              <input type="number" id="new-cost-price" class="form-control" min="0" step="0.01" placeholder="e.g. 210" required>
+            </div>
+
+            <div class="form-group">
+              <label for="new-selling-price">Selling Price (MRP) <span class="req">*</span></label>
+              <input type="number" id="new-selling-price" class="form-control" min="0" step="0.01" placeholder="e.g. 240" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="new-stock-qty">Initial Stock Quantity <span class="req">*</span></label>
+              <input type="number" id="new-stock-qty" class="form-control" min="0" step="any" placeholder="e.g. 15" required>
+            </div>
+
+            <div class="form-group">
+              <label for="new-min-stock">Low Stock Alert Level</label>
+              <input type="number" id="new-min-stock" class="form-control" min="0" step="1" value="5">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="new-barcode">Barcode / SKU (Optional)</label>
+            <input type="text" id="new-barcode" class="form-control" placeholder="Scan or type barcode">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-close="modal-add-product">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 4: QUICK SALE -->
+  <div class="modal-overlay" id="modal-sale">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-title-icon" style="background: #fef3c7; color: #b45309;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
+              <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Quick Sale (Deduct Stock)</h3>
+            <p class="form-hint">Record customer sale & reduce remaining stock</p>
+          </div>
+        </div>
+        <button class="close-btn" data-close="modal-sale">&times;</button>
+      </div>
+
+      <form id="form-sale">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="sale-product-select">Select Product <span class="req">*</span></label>
+            <select id="sale-product-select" class="form-control" required>
+              <option value="">-- Choose Product Sold --</option>
+            </select>
+          </div>
+
+          <div class="stock-calculation-card" style="background: #fffbeb; border-color: #fde68a;">
+            <div class="calc-title" style="color: #b45309;">Sale Summary</div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <span>Available in Stock:</span>
+              <strong id="sale-available-stock">0 units</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <span>Selling Price / Unit:</span>
+              <strong id="sale-unit-price">₹0.00</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-top: 1px dashed #d97706; padding-top: 8px; font-size: 1.1rem;">
+              <span>Total Bill Amount:</span>
+              <strong id="sale-total-amount" style="color: #b45309;">₹0.00</strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="sale-qty">Quantity Sold <span class="req">*</span></label>
+            <input type="number" id="sale-qty" class="form-control" min="1" step="any" value="1" required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-close="modal-sale">Cancel</button>
+          <button type="submit" class="btn btn-primary">Complete Sale</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: REGISTER NEW CUSTOMER -->
+  <div class="modal-overlay" id="modal-add-customer">
+    <div class="modal-content" style="max-width: 480px;">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-title-icon" style="background: #dbeafe; color: #1e40af;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <line x1="20" y1="8" x2="20" y2="14"/>
+              <line x1="23" y1="11" x2="17" y2="11"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Register Customer</h3>
+            <p class="form-hint">Save customer details for digital billing</p>
+          </div>
+        </div>
+        <button class="close-btn" data-close="modal-add-customer">&times;</button>
+      </div>
+
+      <form id="form-add-customer">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="reg-cust-name">Customer Name <span class="req">*</span></label>
+            <input type="text" id="reg-cust-name" class="form-control" placeholder="e.g. Rahul Sharma" required>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-cust-phone">Mobile Number (10 digits) <span class="req">*</span></label>
+            <input type="tel" id="reg-cust-phone" class="form-control" placeholder="e.g. 9876543210" pattern="[0-9]{10}" required>
+            <div class="form-hint">Used to send digital bills on WhatsApp and SMS</div>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-cust-address">Address / Notes (Optional)</label>
+            <input type="text" id="reg-cust-address" class="form-control" placeholder="e.g. House #14, Main Bazar">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-close="modal-add-customer">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Customer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: RECEIPT PREVIEW & SEND DIGITAL BILL -->
+  <div class="modal-overlay" id="modal-receipt">
+    <div class="modal-content" style="max-width: 440px;">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-title-icon" style="background: #dcfce7; color: #166534;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+          </div>
+          <div>
+            <h3>Receipt & Digital Bill</h3>
+            <p class="form-hint">Send to customer mobile or print</p>
+          </div>
+        </div>
+        <button class="close-btn" data-close="modal-receipt">&times;</button>
+      </div>
+
+      <div class="modal-body" style="padding: 16px; background: #f8fafc; max-height: 70vh; overflow-y: auto;">
+        <div id="receipt-print-area" class="receipt-slip">
+          <!-- Dynamically populated receipt content -->
+        </div>
+      </div>
+
+      <div class="modal-footer" style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 8px; width: 100%;">
+          <button type="button" class="btn btn-whatsapp" id="btn-modal-send-whatsapp" style="justify-content: center;">
+            📲 Send on WhatsApp
+          </button>
+          <button type="button" class="btn btn-outline" id="btn-modal-send-sms" style="justify-content: center;">
+            💬 Send SMS
+          </button>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%;">
+          <button type="button" class="btn btn-success" id="btn-print-receipt-dialog" style="justify-content: center;">
+            🖨️ Print Slip
+          </button>
+          <button type="button" class="btn btn-outline" data-close="modal-receipt" style="justify-content: center;">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: BACKUP & SETTINGS -->
+  <div class="modal-overlay" id="modal-settings">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-title-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Store Settings & Backup</h3>
+            <p class="form-hint">Manage store name, currency, and data export/import</p>
+          </div>
+        </div>
+        <button class="close-btn" data-close="modal-settings">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="setting-store-name">Store Name</label>
+          <input type="text" id="setting-store-name" class="form-control" value="My General Store">
+        </div>
+
+        <div class="form-group">
+          <label for="setting-store-phone">Store Mobile / WhatsApp Number (Printed on bill)</label>
+          <input type="tel" id="setting-store-phone" class="form-control" placeholder="e.g. 9812345678">
+        </div>
+
+        <div class="form-group">
+          <label for="setting-currency">Currency Symbol</label>
+          <select id="setting-currency" class="form-control">
+            <option value="₹">₹ (Indian Rupee - INR)</option>
+            <option value="$">$ (US Dollar - USD)</option>
+            <option value="€">€ (Euro - EUR)</option>
+            <option value="£">£ (British Pound - GBP)</option>
+            <option value="Rs.">Rs. (Rupees)</option>
+            <option value="৳">৳ (BDT)</option>
+            <option value="₨">₨ (PKR / NPR)</option>
+          </select>
+        </div>
+
+        <hr style="margin: 20px 0; border: none; border-top: 1px solid var(--border);">
+
+        <h4 style="margin-bottom: 12px; font-size: 0.95rem; color: #1e293b;">Data Backup & Export</h4>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <button type="button" class="btn btn-outline" id="btn-export-excel">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="8" y1="13" x2="16" y2="13"/>
+              <line x1="8" y1="17" x2="16" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+            Export Stock to CSV (Excel format)
+          </button>
+
+          <button type="button" class="btn btn-outline" id="btn-backup-json">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+            </svg>
+            Download Full Store Backup File (.json)
+          </button>
+
+          <label class="btn btn-outline" style="cursor: pointer; justify-content: center;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+            </svg>
+            Restore Store Data From File
+            <input type="file" id="input-restore-file" accept=".json" style="display: none;">
+          </label>
+
+          <button type="button" class="btn btn-danger btn-sm" id="btn-reset-sample-data" style="margin-top: 10px;">
+            Reset to Sample Store Items
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="btn-save-settings">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- MODAL: ADD SUPPLIER PENDING BILL -->
+  <div class="modal-overlay" id="modal-add-sbill">
+    <div class="modal-content" style="max-width: 480px;">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-title-icon" style="background: #fee2e2; color: #b91c1c;">🏭</div>
+          <div>
+            <h3>Supplier Pending Bill</h3>
+            <p class="form-hint">Jo bill hume pay karna hai</p>
+          </div>
+        </div>
+        <button class="close-btn" data-close="modal-add-sbill">&times;</button>
+      </div>
+      <form id="form-add-sbill">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="sb-name">Supplier / Shop ka Naam <span class="req">*</span></label>
+            <input type="text" id="sb-name" class="form-control" list="supplier-datalist" placeholder="e.g. Sharma Wholesale" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="sb-amount">Bill Amount <span class="req">*</span></label>
+              <input type="number" id="sb-amount" class="form-control" min="1" step="any" required>
+            </div>
+            <div class="form-group">
+              <label for="sb-billno">Bill # / Note</label>
+              <input type="text" id="sb-billno" class="form-control" placeholder="e.g. INV-2231, atta + tel">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="sb-date">Bill Date</label>
+              <input type="date" id="sb-date" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="sb-due">Pay karne ki Last Date</label>
+              <input type="date" id="sb-due" class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-close="modal-add-sbill">Cancel</button>
+          <button type="submit" class="btn btn-primary">Bill Save Karo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD CUSTOMER UDHARI -->
+  <div class="modal-overlay" id="modal-add-udhari">
+    <div class="modal-content" style="max-width: 480px;">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-title-icon" style="background: #fef3c7; color: #b45309;">📒</div>
+          <div>
+            <h3>Customer Udhari</h3>
+            <p class="form-hint">Customer ko udhar diya hua saaman / paisa</p>
+          </div>
+        </div>
+        <button class="close-btn" data-close="modal-add-udhari">&times;</button>
+      </div>
+      <form id="form-add-udhari">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ud-phone">Mobile Number</label>
+              <input type="tel" id="ud-phone" class="form-control" list="customer-phone-datalist" placeholder="Registered customer chunein" pattern="[0-9]{10}">
+            </div>
+            <div class="form-group">
+              <label for="ud-name">Customer Naam <span class="req">*</span></label>
+              <input type="text" id="ud-name" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ud-amount">Udhari Amount <span class="req">*</span></label>
+              <input type="number" id="ud-amount" class="form-control" min="1" step="any" required>
+            </div>
+            <div class="form-group">
+              <label for="ud-date">Date</label>
+              <input type="date" id="ud-date" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="ud-note">Saaman / Note</label>
+            <input type="text" id="ud-note" class="form-control" placeholder="e.g. 5kg chawal, 1 tel pouch">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-close="modal-add-udhari">Cancel</button>
+          <button type="submit" class="btn btn-primary">Udhari Save Karo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: PAYMENT (shared by both sections) -->
+  <div class="modal-overlay" id="modal-khata-pay">
+    <div class="modal-content" style="max-width: 440px;">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-title-icon" style="background: #dcfce7; color: #166534;">💵</div>
+          <div>
+            <h3 id="kp-title">Payment</h3>
+            <p class="form-hint" id="kp-sub"></p>
+          </div>
+        </div>
+        <button class="close-btn" data-close="modal-khata-pay">&times;</button>
+      </div>
+      <form id="form-khata-pay">
+        <input type="hidden" id="kp-type">
+        <input type="hidden" id="kp-id">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="kp-amount">Amount <span class="req">*</span></label>
+              <input type="number" id="kp-amount" class="form-control" min="0.01" step="any" required>
+              <div class="form-hint" id="kp-hint"></div>
+            </div>
+            <div class="form-group">
+              <label for="kp-date">Date</label>
+              <input type="date" id="kp-date" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="kp-mode">Kaise (Cash / UPI)</label>
+            <select id="kp-mode" class="form-control">
+              <option>Cash</option><option>UPI</option><option>Bank Transfer</option><option>Cheque</option>
+            </select>
+          </div>
+          <div id="kp-history" class="khata-history"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-close="modal-khata-pay">Cancel</button>
+          <button type="submit" class="btn btn-success" id="kp-submit">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CUSTOMER FULL LEDGER STATEMENT (All bills of one customer) -->
+  <div class="modal-overlay" id="modal-customer-ledger">
+    <div class="modal-content" style="max-width: 720px;">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-title-icon" style="background: #fef3c7; color: #b45309;">📂</div>
+          <div>
+            <h3 id="cld-customer-name">Customer Khata Ledger</h3>
+            <p class="form-hint" id="cld-customer-sub">Sabhi pending aur paid bills ka vivaran</p>
+          </div>
+        </div>
+        <button class="close-btn" data-close="modal-customer-ledger">&times;</button>
+      </div>
+
+      <div class="modal-body" style="padding: 16px;">
+        <!-- Top customer summary cards -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px;">
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px; text-align:center;">
+            <small style="color:#64748b; font-size:0.75rem; font-weight:600; display:block;">Kul Udhari (Total)</small>
+            <b id="cld-total-amt" style="font-size:1.15rem; color:#0f172a;">₹0.00</b>
+          </div>
+          <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:10px; text-align:center;">
+            <small style="color:#166534; font-size:0.75rem; font-weight:600; display:block;">Ab Tak Jama (Paid)</small>
+            <b id="cld-total-paid" style="font-size:1.15rem; color:#16a34a;">₹0.00</b>
+          </div>
+          <div style="background:#fffbeb; border:1.5px solid #fde68a; border-radius:8px; padding:10px; text-align:center;">
+            <small style="color:#b45309; font-size:0.75rem; font-weight:600; display:block;">KUL BAAKI (Net Due)</small>
+            <b id="cld-total-due" style="font-size:1.3rem; color:#b91c1c;">₹0.00</b>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <h4 style="font-size:0.9rem; color:#1e293b; font-weight:700;">Customer ke Sabhi Bills</h4>
+          <span class="badge" id="cld-bills-count" style="background:#e0e7ff; color:#3730a3; font-weight:600;">0 Bills</span>
+        </div>
+
+        <div class="table-responsive" style="max-height: 300px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px;">
+          <table class="data-table" style="font-size:0.84rem;">
+            <thead>
+              <tr>
+                <th>Bill / Date</th>
+                <th>Saaman / Note</th>
+                <th>Bill Rakam</th>
+                <th>Jama</th>
+                <th>Baaki</th>
+                <th>Status</th>
+                <th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="cld-bills-tbody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="btn btn-whatsapp" id="btn-cld-whatsapp">
+            📲 WhatsApp Par Hisab Bhejo
+          </button>
+          <button type="button" class="btn btn-outline" id="btn-cld-print">
+            🖨️ Print Statement
+          </button>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="btn btn-success" id="btn-cld-pay-all">
+            💵 Ek Saath Jama Karo
+          </button>
+          <button type="button" class="btn btn-outline" data-close="modal-customer-ledger">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <datalist id="supplier-datalist"></datalist>
+
+  <!-- Datalists for Autocomplete -->
+  <datalist id="category-datalist">
+    <option value="Grains & Flour">
+    <option value="Pulses & Dals">
+    <option value="Cooking Oils & Ghee">
+    <option value="Spices & Salt">
+    <option value="Snacks & Biscuits">
+    <option value="Tea, Coffee & Drinks">
+    <option value="Soaps & Detergents">
+    <option value="Personal Care">
+    <option value="Dairy & Bakery">
+    <option value="Household & Cleaning">
+  </datalist>
+
+  <datalist id="customer-phone-datalist">
+    <!-- Populated dynamically with registered customer phones -->
+  </datalist>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <script src="app.js"></script>
+  <script src="khata.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html>
